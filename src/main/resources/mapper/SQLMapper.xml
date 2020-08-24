@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间mapper,如果有多个mapper文件，这个必须唯一 -->
+<mapper namespace="com.luo.domain">
+    <!--测试某一条用例-->
+    <select id="testOne" parameterType="String" resultType="com.luo.domain.UserInfo">
+        select * from case.user where username=#{username} and status=1;
+    </select>
+
+<!--    获取所有的用户-->
+    <select id="getUserList" resultType="com.luo.domain.UserInfo">
+--         select * from case.user;
+    select * from case.user order by  joinTime desc limit 10;
+    </select>
+
+<!--    分页查询-->
+    <select id="getUserPageList" resultType="com.luo.domain.UserInfo" parameterType="java.lang.Integer">
+        select * from case.user order by  joinTime desc limit #{pageNum},10;
+    </select>
+
+<!--    根据username查找-->
+    <select id="findOneUser" parameterType="String" resultType="com.luo.domain.UserInfo">
+        select * from case.user where username=#{username};
+
+    </select>
+
+<!--    添加用户-->
+    <insert id="insertUser" parameterType="com.luo.domain.UserInfo">
+        insert into user (userid,username,password,email,phoneNum,joinTime,status) values (replace(uuid(), '-', ''),#{username},#{password},#{email},#{phoneNum},now(),#{status});
+    </insert>
+
+<!--    删除用户-->
+    <delete id="delUserById" parameterType="String">
+        delete from case.user t where t.`userid`  = #{userid};
+    </delete>
+
+<!--    更新用户-->
+    <update id="updateUserById" parameterType="com.luo.domain.UserInfo">
+        update user set username=#{username},password=#{password},email=#{email},phoneNum=#{phoneNum},joinTime=now(),status=#{status} where userid = #{userid}
+    </update>
+
+<!--    获取用户数量-->
+    <select id="getUserCount" resultType="java.lang.Integer">
+        select count(*) from user;
+    </select>
+
+    <select id="getCaseList" resultType="com.luo.domain.MyCaseInfo">
+        select caseid,caseName,project,domain,status from case.mycase;
+    </select>
+
+    <select id="testc">
+        select concat(bb.purl, aa.curl, if(aa.par, concat('?',aa.par), '')) from cc
+        inner join aa on cc.cpid = aa.cid
+        inner join bb on cc.pcid = bb.pid
+    </select>
+
+</mapper>
